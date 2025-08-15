@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portofolio • Roja</title>
+  <!-- Tailwind CSS v4 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary:#F97316; /* orange-500 */
+      --court:#fb923c;   /* orange-400 */
+      --dark:#0B1220;
+    }
+    body{ font-family: 'Outfit', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; }
+
+    /* Top scroll progress */
+    #progressBar{ position: fixed; inset: 0 auto auto 0; height: 4px; width: 0; background: linear-gradient(90deg,var(--primary),#f59e0b); z-index: 9999; box-shadow: 0 0 12px rgba(249,115,22,.7); }
+
+    /* Court background pattern */
+    .court-pattern{ background-color: #1f2937; background-image:
+      radial-gradient(circle at 20px 20px, rgba(255,255,255,.08) 2px, transparent 3px),
+      linear-gradient(#0000 0 0),
+      linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px),
+      linear-gradient( rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 40px 40px, 100% 100%, 60px 60px, 60px 60px;
+      background-position: 0 0, 0 0, 0 0, 0 0;
+    }
+
+    /* Bouncing basketball */
+    @keyframes bounceBall{ 0%,100%{ transform: translateY(0) scale(1,1);} 50%{ transform: translateY(-18px) scale(1.02,.98);} }
+    .ball{ animation: bounceBall 1.6s ease-in-out infinite; filter: drop-shadow(0 10px 15px rgba(0,0,0,.25)); }
+
+    /* Subtle float */
+    @keyframes floaty{ 0%{transform:translateY(0)} 50%{transform:translateY(-6px)} 100%{transform:translateY(0)} }
+    .floaty{ animation: floaty 6s ease-in-out infinite; }
+
+    /* Card hover tilt */
+    .tilt{ transform-style: preserve-3d; transition: transform .25s ease, box-shadow .25s ease; }
+    .tilt:hover{ transform: translateY(-4px) rotateX(4deg) rotateY(-4deg); box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+
+    /* Active nav underline */
+    .link-underline::after{ content: ""; display:block; height:2px; width:0; background: var(--primary); transition: width .25s ease; }
+    .link-underline.active::after, .link-underline:hover::after{ width:100%; }
+
+    /* Testimonial carousel */
+    .carousel-track{ display:flex; gap:1rem; transition: transform .6s cubic-bezier(.22,.61,.36,1); }
+
+    /* Hide the default number arrows on inputs */
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#0B1220] dark:text-slate-100">
+
+  <!-- Scroll progress -->
+  <div id="progressBar"></div>
+
+  <!-- Navbar -->
+  <header id="navbar" class="fixed top-0 inset-x-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/40 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between">
+        <a href="#home" class="flex items-center gap-2 font-bold text-xl tracking-tight">
+          <svg width="28" height="28" viewBox="0 0 100 100" class="text-orange-500">
+            <circle cx="50" cy="50" r="44" fill="currentColor"/>
+            <path d="M14 50h72M50 14v72" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <span>Roja<span class="text-orange-500">Hoops</span></span>
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          <a href="#home" class="link-underline">Home</a>
+          <a href="#about" class="link-underline">About</a>
+          <a href="#blog" class="link-underline">Blog</a>
+          <a href="#testi" class="link-underline">Testimonial</a>
+          <a href="#contact" class="link-underline">Contact</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <button id="themeToggle" aria-label="Toggle theme" class="rounded-xl border border-slate-300/40 dark:border-white/10 px-3 py-1.5 text-sm hover:bg-white/60 dark:hover:bg-white/5 transition">
+            🌙/☀️
+          </button>
+          <button id="menuBtn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-300/40 dark:border-white/10">☰</button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-white/10 bg-white/90 dark:bg-slate-900/80 backdrop-blur">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-3">
+        <a class="py-2" href="#home">Home</a>
+        <a class="py-2" href="#about">About</a>
+        <a class="py-2" href="#blog">Blog</a>
+        <a class="py-2" href="#testi">Testimonial</a>
+        <a class="py-2" href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="home" class="pt-28">
+    <div class="relative isolate">
+      <div class="absolute inset-0 -z-10 court-pattern opacity-70 dark:opacity-60"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div class="inline-flex items-center gap-2 rounded-full bg-white/70 dark:bg-slate-800/70 px-3 py-1 text-xs border border-white/20 shadow-sm">
+              <span class="inline-block w-2 h-2 rounded-full bg-orange-500"></span>
+              Siap masuk starting five karier tech kamu
+            </div>
+            <h1 class="mt-4 text-4xl sm:text-5xl font-extrabold leading-tight">
+              Bangun <span class="text-orange-500">Portofolio</span> yang <span class="underline decoration-wavy decoration-orange-400">meledak</span> seperti <span class="text-orange-500">slam dunk</span>!
+            </h1>
+            <p class="mt-4 text-slate-600 dark:text-slate-300 max-w-xl">Saya Roja, developer muda yang mencintai basket dan kode bersih. Saya membuat web yang cepat, indah, dan terasa gesit seperti fast break.</p>
+            <div class="mt-6 flex flex-wrap gap-3">
+              <a href="#contact" class="px-5 py-3 rounded-xl bg-orange-500 text-white font-semibold shadow hover:shadow-lg transition">Hire Me</a>
+              <a href="#blog" class="px-5 py-3 rounded-xl border border-slate-300/50 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/5 transition">Lihat Proyek</a>
+            </div>
+            <div class="mt-8 flex items-center gap-8 text-sm">
+              <div class="floaty">
+                <div class="text-3xl font-bold" id="statYears">0+</div>
+                <div class="text-slate-500 dark:text-slate-400">Tahun Ngoding</div>
+              </div>
+              <div class="floaty [animation-delay:1s]">
+                <div class="text-3xl font-bold" id="statProjects">0</div>
+                <div class="text-slate-500 dark:text-slate-400">Proyek Selesai</div>
+              </div>
+              <div class="floaty [animation-delay:2s]">
+                <div class="text-3xl font-bold" id="statClients">0</div>
+                <div class="text-slate-500 dark:text-slate-400">Klien Puas</div>
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <!-- Decorative hoops -->
+            <div class="absolute -top-8 -left-8 w-40 h-40 rounded-full bg-gradient-to-tr from-orange-500 to-amber-400 blur-3xl opacity-30"></div>
+            <div class="absolute -bottom-12 -right-10 w-52 h-52 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-300 blur-3xl opacity-30"></div>
+
+            <svg class="ball mx-auto" width="280" height="280" viewBox="0 0 200 200">
+              <defs>
+                <radialGradient id="g" cx="35%" cy="35%" r="65%">
+                  <stop offset="0%" stop-color="#ffd6a0"/>
+                  <stop offset="60%" stop-color="#f97316"/>
+                  <stop offset="100%" stop-color="#c2410c"/>
+                </radialGradient>
+              </defs>
+              <circle cx="100" cy="100" r="90" fill="url(#g)"/>
+              <path d="M10 100h180M100 10v180M35 35c40 40 90 40 130 0M35 165c40-40 90-40 130 0" stroke="#1f2937" stroke-width="6" stroke-linecap="round" fill="none"/>
+            </svg>
+
+            <div class="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">"Code seperti bola—semakin halus pantulannya, semakin enak dimainkan."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1000&auto=format&fit=crop" alt="Roja" class="w-full h-80 object-cover rounded-3xl shadow-xl">
+          <div class="absolute -bottom-6 -left-6 bg-orange-500 text-white px-4 py-2 rounded-xl shadow-xl">Point Guard • Frontend</div>
+        </div>
+        <div>
+          <h2 class="text-3xl font-extrabold">Tentang Saya</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">Saya fokus pada pengembangan web modern: React, Tailwind, dan animasi halus. Di luar layar, saya belajar teamwork dan strategi lewat basket—membuat saya disiplin terhadap performa dan kolaborasi.</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm">HTML</span>
+            <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm">CSS/Tailwind</span>
+            <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm">JavaScript</span>
+            <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm">React</span>
+            <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm">GSAP</span>
+          </div>
+          <div class="mt-6 grid sm:grid-cols-2 gap-4">
+            <div class="p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/5 tilt">
+              <h3 class="font-semibold">Kecepatan</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Optimasi performa & aksesibilitas setara fast-break offense.</p>
+            </div>
+            <div class="p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/5 tilt">
+              <h3 class="font-semibold">Konsistensi</h3>
+              <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Desain sistematis dengan Tailwind & style guide.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog/Projects -->
+  <section id="blog" class="py-20 bg-gradient-to-b from-white to-orange-50/40 dark:from-slate-900 dark:to-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-3xl font-extrabold">Blog & Proyek</h2>
+        <a href="#" class="text-sm text-orange-600 hover:underline">Lihat semua</a>
+      </div>
+      <div class="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <article class="tilt p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+          <img class="w-full h-40 object-cover rounded-xl" src="https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop" alt="project"/>
+          <h3 class="mt-4 font-semibold">Court Finder App</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Progressive web app untuk mencari lapangan basket terdekat.</p>
+          <div class="mt-3 flex gap-2 text-xs text-slate-600 dark:text-slate-300">
+            <span class="px-2 py-1 rounded bg-slate-100 dark:bg-white/10">React</span>
+            <span class="px-2 py-1 rounded bg-slate-100 dark:bg-white/10">Tailwind</span>
+            <span class="px-2 py-1 rounded bg-slate-100 dark:bg-white/10">PWA</span>
+          </div>
+        </article>
+        <!-- Card 2 -->
+        <article class="tilt p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+          <img class="w-full h-40 object-cover rounded-xl" src="https://images.unsplash.com/photo-1520975939962-9ae72c05a53d?q=80&w=1200&auto=format&fit=crop" alt="project"/>
+          <h3 class="mt-4 font-semibold">Shot Chart Visualizer</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Visualisasi data tembakan (heatmap, efficiency) untuk tim komunitas.</p>
+          <div class="mt-3 flex gap-2 text-xs text-slate-600 dark:text-slate-300">
+            <span class="px-2 py-1 rounded bg-slate-100 dark:bg-white/10">D3.js</span>
+            <span class="px-2 py-1 rounded bg-slate-100 dark:bg-white/10">CSV</span>
+          </div>
+        </article>
+        <!-- Card 3 -->
+        <article class="tilt p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+          <img class="w-full h-40 object-cover rounded-xl" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop" alt="project"/>
+          <h3 class="mt-4 font-semibold">Blog: Mindset Point Guard</h3>
+          <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Catatan singkat tentang leadership ala point guard di dunia dev.</p>
+          <div class="mt-3 flex gap-2 text-xs text-slate-600 dark:text-slate-300">
+            <span class="px-2 py-1 rounded bg-slate-100 dark:bg-white/10">Leadership</span>
+            <span class="px-2 py-1 rounded bg-slate-100 dark:bg-white/10">Career</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial -->
+  <section id="testi" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-end justify-between gap-4">
+        <h2 class="text-3xl font-extrabold">Apa Kata Mereka</h2>
+        <div class="flex gap-2">
+          <button id="prev" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10">◀</button>
+          <button id="next" class="px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10">▶</button>
+        </div>
+      </div>
+      <div class="mt-8 overflow-hidden">
+        <div id="track" class="carousel-track">
+          <div class="min-w-[300px] md:min-w-[420px] p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+            <p class="italic">“Roja bikin landing page tim basket kami super ringan dan mantap animasinya.”</p>
+            <div class="mt-3 text-sm text-slate-600 dark:text-slate-300">— Ardi, Pelatih</div>
+          </div>
+          <div class="min-w-[300px] md:min-w-[420px] p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+            <p class="italic">“Detail UI/UX-nya rapih, komunikasi cepat, dan deadline selalu masuk ring.”</p>
+            <div class="mt-3 text-sm text-slate-600 dark:text-slate-300">— Naya, PM</div>
+          </div>
+          <div class="min-w-[300px] md:min-w-[420px] p-5 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+            <p class="italic">“Refactor + performance boost sampai 40%. Highly recommended!”</p>
+            <div class="mt-3 text-sm text-slate-600 dark:text-slate-300">— Dimas, Tech Lead</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="py-20 bg-gradient-to-t from-white to-orange-50/40 dark:from-slate-900 dark:to-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-start">
+        <div>
+          <h2 class="text-3xl font-extrabold">Hubungi Saya</h2>
+          <p class="mt-3 text-slate-600 dark:text-slate-300">Ada proyek, kolaborasi, atau sparing 3x3? Kirim pesan di sini.</p>
+          <form id="contactForm" class="mt-6 space-y-4">
+            <div>
+              <label class="text-sm">Nama</label>
+              <input type="text" required class="mt-1 w-full rounded-xl border border-slate-300/60 dark:border-white/10 bg-white/70 dark:bg-white/5 px-4 py-3 outline-none focus:ring-2 ring-orange-500" placeholder="Nama kamu"/>
+            </div>
+            <div>
+              <label class="text-sm">Email</label>
+              <input type="email" required class="mt-1 w-full rounded-xl border border-slate-300/60 dark:border-white/10 bg-white/70 dark:bg-white/5 px-4 py-3 outline-none focus:ring-2 ring-orange-500" placeholder="email@contoh.com"/>
+            </div>
+            <div>
+              <label class="text-sm">Pesan</label>
+              <textarea required rows="5" class="mt-1 w-full rounded-xl border border-slate-300/60 dark:border-white/10 bg-white/5 px-4 py-3 outline-none focus:ring-2 ring-orange-500" placeholder="Ceritakan kebutuhanmu...">
+              </textarea>
+            </div>
+            <button class="px-5 py-3 rounded-xl bg-orange-500 text-white font-semibold shadow hover:shadow-lg transition">Kirim</button>
+            <p id="formStatus" class="text-sm text-slate-600 dark:text-slate-300"></p>
+          </form>
+        </div>
+        <div class="space-y-6">
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+            <h3 class="font-semibold">Ketersediaan</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Terbuka untuk freelance & part-time. Respon cepat dalam 24 jam kerja.</p>
+          </div>
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+            <h3 class="font-semibold">Sosial</h3>
+            <div class="mt-3 flex gap-3 text-sm">
+              <a class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/5" href="#">GitHub</a>
+              <a class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/5" href="#">LinkedIn</a>
+              <a class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/5" href="#">Instagram</a>
+            </div>
+          </div>
+          <div class="p-6 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5">
+            <h3 class="font-semibold">Highlight</h3>
+            <ul class="mt-2 list-disc list-inside text-sm text-slate-600 dark:text-slate-300">
+              <li>Top 5 UI Hackathon Kampus 2025</li>
+              <li>Kontributor OSS UI Komponen</li>
+              <li>Juara 3 Turnamen 3x3 Pelajar</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-10 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-sm">© <span id="year"></span> RojaHoops. All rights reserved.</div>
+        <div class="text-sm text-slate-600 dark:text-slate-300">Made with ❤️ & 🏀</div>
+      </div>
+    </div>
+  </footer>
+
+  <button id="backToTop" title="Kembali ke atas" class="fixed bottom-6 right-6 hidden items-center justify-center w-11 h-11 rounded-full bg-orange-500 text-white shadow-lg">↑</button>
+
+  <script>
+    // Theme toggle
+    const toggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if(localStorage.theme === 'dark' || (!('theme' in localStorage) && prefersDark)){
+      root.classList.add('dark');
+    }
+    toggle.addEventListener('click', ()=>{
+      root.classList.toggle('dark');
+      localStorage.theme = root.classList.contains('dark') ? 'dark' : 'light';
+    });
+
+    // Mobile menu
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+
+    // Scroll progress
+    const progressBar = document.getElementById('progressBar');
+    window.addEventListener('scroll', ()=>{
+      const h = document.documentElement;
+      const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight);
+      progressBar.style.width = (scrolled * 100) + '%';
+    });
+
+    // Back to top
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', ()=>{
+      backToTop.classList.toggle('hidden', window.scrollY < 400);
+    });
+    backToTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Active link / scrollspy
+    const sections = ['home','about','blog','testi','contact'];
+    const links = Array.from(document.querySelectorAll('nav a, #mobileMenu a'));
+    const observer = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        const id = entry.target.id;
+        const navLink = links.find(a=> a.getAttribute('href') === '#' + id);
+        if(navLink){ navLink.classList.toggle('active', entry.isIntersecting && entry.intersectionRatio > .5); }
+      });
+    }, {threshold: .55});
+    sections.forEach(id=> observer.observe(document.getElementById(id)));
+
+    // Fun number counter
+    function countUp(el, end, duration=1200){
+      const start = 0; let startTime=null;
+      const step=(ts)=>{
+        if(!startTime) startTime = ts;
+        const p = Math.min((ts - startTime)/duration,1);
+        el.textContent = Math.floor(p*(end-start)+start) + (end>20?'':'');
+        if(p<1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    countUp(document.getElementById('statYears'), 3);
+    countUp(document.getElementById('statProjects'), 18);
+    countUp(document.getElementById('statClients'), 12);
+
+    // Testimonial carousel
+    const track = document.getElementById('track');
+    const items = track.children;
+    let index = 0;
+    function updateCarousel(){
+      const cardWidth = items[0].getBoundingClientRect().width + 16; // gap
+      track.style.transform = `translateX(${-index * cardWidth}px)`;
+    }
+    document.getElementById('next').addEventListener('click', ()=>{ index = (index + 1) % items.length; updateCarousel(); });
+    document.getElementById('prev').addEventListener('click', ()=>{ index = (index - 1 + items.length) % items.length; updateCarousel(); });
+    setInterval(()=>{ index = (index + 1) % items.length; updateCarousel(); }, 4000);
+
+    // Contact form fake submit
+    document.getElementById('contactForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const status = document.getElementById('formStatus');
+      status.textContent = 'Terima kasih! Pesan kamu sudah terkirim (demo).';
+    });
+
+    // Current year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
